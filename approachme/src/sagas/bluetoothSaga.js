@@ -77,7 +77,7 @@ export function* bluetoothBroadcaster(bleAvertiser) {
 
 
 
-export function* bluetoothBroadcastWatcher() {
+export function* bluetoothBroadcastAndListenerWatcher() {
     let broadcasterTask, scannerTask;
     const bleAvertiser = yield call(createBleAdvertiser);
     const bleManager = yield call(createBleManager);
