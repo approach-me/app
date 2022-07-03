@@ -2,4 +2,4 @@ export const CHECK_DEVICE_BLUETOOTH_STATE = 'CHECK_DEVICE_BLUETOOTH_STATE';  // 
 
 export const UPDATE_BLUETOOTH_STATE = 'UPDATE_BLUETOOTH_STATE';  // used to update bluetooth state to update UI accordingly
 
-export const DEVICED_SCANED = 'DEVICED_SCANNED';
+export const DEVICE_SCANED = 'DEVICE_SCANNED';

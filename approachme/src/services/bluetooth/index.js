@@ -1,7 +1,7 @@
 import { BleManager } from 'react-native-ble-plx';
 import BLEAdvertiser from 'react-native-ble-advertiser'
 import { store } from '../../store/store';
-import { DEVICED_SCANED } from '../../actions/bluetoothActions';
+import { DEVICE_SCANED } from '../../actions/bluetoothActions';
 
 const COMPANY_ID = 0x4C
 const SERVICE_UUID = '7ef79c92-61c2-4041-b0d1-7ce34616e800'
@@ -40,7 +40,7 @@ export const bluetoothDeviceListener = (error, scannedDevice) => {
     // TODO Later: Handle error
     if (!scannedDevice || !scannedDevice.name) return;
     store.dispatch({
-        type: DEVICED_SCANED,
+        type: DEVICE_SCANED,
         scannedDevice: {
             name: scannedDevice.name,
             id: scannedDevice.id

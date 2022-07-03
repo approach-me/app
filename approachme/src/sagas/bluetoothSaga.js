@@ -2,7 +2,7 @@ import { take, call, put, select, cancelled, cancel, delay, fork } from 'redux-s
 import { createBluetoothChannel } from '../channels/bluetoothChannel'
 import { broadcastBluetoothSignal, createBleAdvertiser, createBleManager, getBluetoothState, stopBroadcastBluetoothSignal, BROADCAST_FREQUENCY, startBluetoothScanningService, bluetoothDeviceListener, stopBluetoothScanning } from '../services/bluetooth'
 import { BLUETOOTH_EVENT_TYPES } from '../events'
-import { DEVICED_SCANED, UPDATE_BLUETOOTH_STATE } from '../actions/bluetoothActions'
+import { DEVICE_SCANED, UPDATE_BLUETOOTH_STATE } from '../actions/bluetoothActions'
 import { selectDeviceBluetoothState } from '../selectors/bluetoothSelectors';
 import { State as BLUETOOTH_STATE } from 'react-native-ble-plx';
 
@@ -47,7 +47,7 @@ export function* bluetoothScanner(bleManager) {
         // now listen for device scanned events
         console.log('SCANNING IN PROGESS!!!')
         while (true) {
-            yield take(DEVICED_SCANED);
+            yield take(DEVICE_SCANED);
             // do some logic to connect to websockets here.
         }
     } finally {

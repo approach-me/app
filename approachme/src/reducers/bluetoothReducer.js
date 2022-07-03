@@ -1,4 +1,4 @@
-import { DEVICED_SCANED, UPDATE_BLUETOOTH_STATE } from '../actions/bluetoothActions'
+import { DEVICE_SCANED, UPDATE_BLUETOOTH_STATE } from '../actions/bluetoothActions'
 
 const initialState = {
   bluetoothState: false,
@@ -13,7 +13,7 @@ const bluetoothReducer = (state = initialState, action) => {
         bluetoothState: action.bluetoothState
       }
     }
-    case DEVICED_SCANED: {  // temp for testing
+    case DEVICE_SCANED: {  // temp for testing
       return {
         ...state,
         scannedDevices: [...state.scannedDevices, [action.scannedDevice.name, action.scannedDevice.id]]
