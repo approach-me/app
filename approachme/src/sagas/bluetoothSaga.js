@@ -103,7 +103,5 @@ export function* bluetoothBroadcastWatcher() {
             broadcasterTask = null;
             scannerTask = null;
         }
-
     }
-
 }

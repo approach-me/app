@@ -16,6 +16,4 @@ export const createBluetoothChannel = (bleManager) => {
 
         return unsubscribe
     })
-
-
 }
