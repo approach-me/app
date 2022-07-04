@@ -1,0 +1,11 @@
+FROM lnogueir/approach-prototools:latest AS protobuilder
+
+RUN git clone https://github.com/approach-me/service-definitions && \
+    cd service-definitions && git checkout main && \
+    mkdir -p ../protos && \
+    find . -name *.proto | \
+    xargs protoc --js_out=import_style=commonjs:../protos --grpc-web_out=import_style=commonjs,mode=grpcwebtext:../protos
+
+FROM scratch
+
+COPY --from=protobuilder /protos ./

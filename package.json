@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "protogen": "docker build --pull --file Dockerfile.ProtoGenerator --output protos ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.2",
