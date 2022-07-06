@@ -1,8 +1,9 @@
-import { DEVICE_SCANED, UPDATE_BLUETOOTH_STATE } from '../actions/bluetoothActions'
+import { DEVICE_SCANED, UPDATE_BLUETOOTH_STATE, UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions'
 
 const initialState = {
   bluetoothState: false,
-  scannedDevices: []
+  scannedDevices: [],
+  isUserSearching: false,
 };
 
 const bluetoothReducer = (state = initialState, action) => {
@@ -17,6 +18,12 @@ const bluetoothReducer = (state = initialState, action) => {
       return {
         ...state,
         scannedDevices: [...state.scannedDevices, [action.scannedDevice.name, action.scannedDevice.id]]
+      }
+    }
+    case UPDATE_USER_SEARCHING_STATE: {  // temp for testing
+      return {
+        ...state,
+        isUserSearching: action.payload,
       }
     }
     default: {
