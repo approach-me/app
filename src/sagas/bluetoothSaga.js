@@ -3,7 +3,7 @@ import { createBluetoothChannel } from '../channels/bluetoothChannel'
 import { broadcastBluetoothSignal, createBleAdvertiser, createBleManager, getBluetoothState, stopBroadcastBluetoothSignal, BROADCAST_FREQUENCY, startBluetoothScanningService, bluetoothDeviceListener, stopBluetoothScanning } from '../services/bluetooth'
 import { BLUETOOTH_EVENT_TYPES } from '../events'
 import { DEVICE_SCANED, UPDATE_BLUETOOTH_STATE } from '../actions/bluetoothActions'
-import { selectDeviceBluetoothState } from '../selectors/bluetoothSelectors';
+import { selectDeviceBluetoothState, selectUserSearchingState } from '../selectors/bluetoothSelectors';
 import { State as BLUETOOTH_STATE } from 'react-native-ble-plx';
 
 
@@ -60,6 +60,7 @@ export function* bluetoothScanner(bleManager) {
 
 export function* bluetoothBroadcaster(bleAvertiser) {
     try {
+        console.log('STARTING BLUETOOTH BroadCaster TASK!!!')
         while (true) {
             const broadcastResult = yield call(broadcastBluetoothSignal, bleAvertiser);
             console.log('broadcastResult', broadcastResult)
@@ -90,9 +91,14 @@ export function* bluetoothBroadcastAndListenerWatcher() {
     }
 
     while (true) {
-        yield take(UPDATE_BLUETOOTH_STATE);
+        yield race({
+            updatedBluetoothState: take(UPDATE_BLUETOOTH_STATE),
+            updatedUserSearchingState: take(UPDATE_USER_SEARCHING_STATE),
+        })
+        console.log('WE FOUND SOMETHING!!!');
         const bluetoothState = yield select(selectDeviceBluetoothState);
-        if (bluetoothState == BLUETOOTH_STATE.PoweredOn) {
+        const isUserSearching = yield select(selectUserSearchingState);
+        if ( bluetoothState == BLUETOOTH_STATE.PoweredOn && isUserSearching) {
             if (broadcasterTask) continue;
             console.log('STARTING BLUETOOTH BROADCASTER!!!');
             broadcasterTask = yield fork(bluetoothBroadcaster, bleAvertiser);
