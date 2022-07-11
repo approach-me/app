@@ -49,7 +49,7 @@ const Counter = (props) => {
         <TouchableOpacity onPress={ () => props.updateUserSearchingState(false)}>
           <View style={styles.radar}>
             {/* <PulseAnimation color={'#73faf8'} numPulses={2} diameter={200} speed={1000} duration={2000} initialDiameter={100}/>  */}
-            <Image style={styles.profileImage} source={require('/Users/sultanemaish/Desktop/FYDP-Code/app/src/screens/images/storyExample.jpeg')}/>
+            <Image style={styles.profileImage} source={require('/Users/apple/Desktop/FYDP/app/src/screens/images/storyExample.jpeg')}/>
           </View>
         </TouchableOpacity>
         
@@ -86,12 +86,12 @@ const Counter = (props) => {
         {/* Radar */}
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.setting}>
-            <Image style={styles.settingWheel} source={require('/Users/sultanemaish/Desktop/FYDP-Code/app/src/screens/Icons/gear.png')}/>
+            <Image style={styles.settingWheel} source={require('/Users/apple/Desktop/FYDP/app/src/screens/Icons/gear.jpeg')}/>
           </TouchableOpacity>
         </View>
         <View style={styles.radarStarter}>
           <TouchableOpacity style={styles.startSearchText} onPress={ () => props.updateUserSearchingState(true)}>
-            <Image style={styles.profileImage} source={require('/Users/sultanemaish/Desktop/FYDP-Code/app/src/screens/images/storyExample.jpeg')}/>
+            <Image style={styles.profileImage} source={require('/Users/apple/Desktop/FYDP/app/src/screens/images/storyExample.jpeg')}/>
           </TouchableOpacity>
           
           <View style={styles.startSearchText}>
