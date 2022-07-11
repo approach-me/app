@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, FlatList, Image, ScrollView } from 'react-native';
-import { Story } from './Components/Story';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, FlatList, Image, ScrollView, ImageBackground } from 'react-native';
+import Story from './components/Story';
 import { connect } from 'react-redux';
 import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
 import {PulseAnimation} from 'react-native-animated-pulse';
-import { UserCard } from './Components/UserCard';
+import UserCard from './components/UserCard';
 import { UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions';
 
 const Counter = (props) => {
@@ -20,7 +20,7 @@ const Counter = (props) => {
             <Text style={styles.headingTitle}>Stories</Text>
             {/* {Show} */}
             <TouchableOpacity style={styles.setting}>
-              <Image style={styles.settingWheel}/>
+              <Image style={styles.settingWheel}  source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
             </TouchableOpacity>
           </View>
           <FlatList 
@@ -48,8 +48,8 @@ const Counter = (props) => {
         {/* Radar */}
         <TouchableOpacity onPress={ () => props.updateUserSearchingState(false)}>
           <View style={styles.radar}>
-            {/* <PulseAnimation color={'#73faf8'} numPulses={2} diameter={200} speed={1000} duration={2000} initialDiameter={100}/>  */}
-            <Image style={styles.profileImage} source={require('/Users/sultanemaish/Desktop/FYDP-Code/app/src/screens/images/storyExample.jpeg')}/>
+            <PulseAnimation color={'#73faf8'} numPulses={2} diameter={200} speed={1000} duration={2000} initialDiameter={100}/> 
+            <ImageBackground style={styles.profileImage} source={{uri:'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}/>
           </View>
         </TouchableOpacity>
         
@@ -86,12 +86,12 @@ const Counter = (props) => {
         {/* Radar */}
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.setting}>
-            <Image style={styles.settingWheel} source={require('/Users/sultanemaish/Desktop/FYDP-Code/app/src/screens/Icons/gear.png')}/>
+            <Image style={styles.settingWheel}  source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
           </TouchableOpacity>
         </View>
         <View style={styles.radarStarter}>
           <TouchableOpacity style={styles.startSearchText} onPress={ () => props.updateUserSearchingState(true)}>
-            <Image style={styles.profileImage} source={require('/Users/sultanemaish/Desktop/FYDP-Code/app/src/screens/images/storyExample.jpeg')}/>
+            <ImageBackground style={styles.profileImage} source={{uri:'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}/>
           </TouchableOpacity>
           
           <View style={styles.startSearchText}>
