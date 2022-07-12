@@ -1,11 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text, View, ImageBackground} from 'react-native';
+import { StyleSheet, View, ImageBackground} from 'react-native';
 
-const UserCard = (props) => {
+const ProfileImage = (props) => {
     return (
         <View style={styles.story}>
             <ImageBackground style={styles.storyImage} source={{uri:props.path}}>
-                <Text style={styles.storyName}>{props.name}, {props.age}</Text>
             </ImageBackground>
         </View> 
     )
@@ -29,15 +28,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         resizeMode: "contain",
     },
-    storyName: {
-        fontFamily: 'System',
-        fontSize: 12,
-        fontWeight: '700',
-        color: '#FFFFFF',
-        position: 'absolute',
-        bottom: 10,
-        left: 10,
-    },
   });
 
-  export default UserCard;
+  export default ProfileImage;

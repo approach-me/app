@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export{Story};
+export default Story;
