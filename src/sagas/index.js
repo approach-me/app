@@ -13,8 +13,8 @@ function* runtimeSaga() {
 export function* rootSaga() {
   yield all([
     fork(runtimeSaga),
-    fork(bluetoothBroadcastAndListenerWatcher),
-    fork(premissionRequestWatcher),
-    fork(bluetoothWatcher)
+    // fork(bluetoothBroadcastAndListenerWatcher),
+    // fork(premissionRequestWatcher),
+    // fork(bluetoothWatcher)
   ]);
 };
