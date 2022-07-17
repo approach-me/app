@@ -1,19 +1,46 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, FlatList, Image, ScrollView, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
 import ProfileImage from './components/ProfileImage';
 import { UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions';
+import firestore from '@react-native-firebase/firestore';
+import { Button } from 'react-native-elements';
+import 'react-native-gesture-handler';
+import { createStackNavigator } from '@react-navigation/stack';
+import ProfileEdit from './ProfileEdit';
 
-const Counter = () => {
+const Stack = createStackNavigator();
+
+const Counter = ({navigation}) => {
+  const [userName, setUserName] = useState("firstName LastName")
+  const [userBio, setUserBio] = useState("bio")
+  const [userInterests, setUserInterests] = useState(["", "", ""])
+  useEffect(() => {
+    const subscriber = firestore()
+    .collection('users')
+    .doc('oEf6SPn639ChvP70RStD')
+    .onSnapshot(documentSnapshot => {
+      setUserName(documentSnapshot.data().firstName);
+      setUserBio(documentSnapshot.data().bio)
+      setUserInterests(documentSnapshot.data().interests);
+    });
+
+    // Stop listening for updates when no longer required
+    return () => subscriber();
+  }, [setUserName, setUserBio, setUserInterests]);
+
+  const goToProfileEdit = () => {
+    navigation.push('ProfileEdit')
+  }
 
   return (
     <SafeAreaView>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         {/* Stories */}
         <View>
-          <TouchableOpacity style={styles.setting}>
-            <Image style={styles.settingWheel}  source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
+          <TouchableOpacity style={styles.setting} onPress = {goToProfileEdit}>
+          <Image style={styles.settingWheel} source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
           </TouchableOpacity>
           <View style={styles.topBar}>
             <View style={styles.profileBlock}>
@@ -35,19 +62,18 @@ const Counter = () => {
             </View>
           </View>
           {/* Bio */}
-          <Text style={styles.nameTitle}>Lucas Mark</Text>
+          <Text style={styles.nameTitle}>{userName}</Text>
           <View>
-            <Text style={styles.bioText}>Describe who you are in 3 word</Text>
-            <Text style={styles.bioText}>Where you are from</Text>
+            <Text style={styles.bioText}>{userBio}</Text>
           </View>
 
           <Text style={styles.interestTitle}>Interests</Text>
           <View style={styles.interests}>
             <FlatList
               data={[
-                {key: 'Biking'},
-                {key: 'Dancing'},
-                {key: 'Music'},
+                {key: userInterests[0]},
+                {key: userInterests[1]},
+                {key: userInterests[2]},
               ]}
               numColumns={3}
               renderItem={({item}) => <Text style={styles.bioText}>{'\u00B7' + ' '}{item.key}</Text>}

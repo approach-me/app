@@ -1,35 +1,68 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, ImageBackground, TextInput, Pressable } from 'react-native';
 import { connect } from 'react-redux';
 import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
 import { UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions';
 import { CheckBox } from 'react-native-elements'
+import 'react-native-gesture-handler';
+import { createStackNavigator } from '@react-navigation/stack';
+import firestore from '@react-native-firebase/firestore';
 
 
+const Stack = createStackNavigator();
 const Counter = () => {
-    const [name, onChangeName] =useState(null);
-    const [bio, onChangeBio] =useState(null);
-    const [isMaleChecked, setMaleCheck] = useState(true);
-    const [interests, onChangeInterests] =useState(null);
-    const [age, setAge] = useState(22);
-    const [ageMin, setAgeMin] =useState(20);
-    const [ageMax, setAgeMax] = useState(24);
+    const [name, onChangeName] = useState(null);
+    const [bio, onChangeBio] = useState(null);
+    const [interests, onChangeInterests] = useState(null);
+    const [age, setAge] = useState(0);
+    const [ageMin, setAgeMin] = useState(0);
+    const [ageMax, setAgeMax] = useState(0);
     const [isMaleFilterChecked, setMaleFilterCheck] = useState(false);
     const [isFemaleFilterChecked, setFemaleFilterCheck] = useState(false);
+    const [gender, setGender] = useState('Male');
+
+    let changeBio = () => {
+      console.log(bio)
+      onChangeBio(bio)
+      const db = firestore();
+      db.collection('users')
+                            .doc('oEf6SPn639ChvP70RStD').update({'bio': bio});
+    }
+    useEffect(() => {
+      const subscriber = firestore().collection('users')
+      .doc('oEf6SPn639ChvP70RStD')
+      .onSnapshot(documentSnapshot => {
+        onChangeName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
+        onChangeBio(documentSnapshot.data().bio)
+        onChangeInterests(documentSnapshot.data().interests);
+        setAge(documentSnapshot.data().age);
+        setGender(documentSnapshot.data().gender)
+      });
+  
+      // Stop listening for updates when no longer required
+      return () => subscriber();
+    }, [ onChangeName, onChangeBio, onChangeInterests, setAge ]);
+
+    const EditNumComponent = ({num, setNum}) => {
+      return (
+        <>
+          <TouchableOpacity onPress={() => setNum(num - 1)}>
+            <Image style={styles.minus} source={{uri:'https://cdn-icons-png.flaticon.com/512/43/43625.png'}}/>
+          </TouchableOpacity>
+          <Text style={styles.ageText}>{num}</Text>
+          <TouchableOpacity onPress={() => setNum(num + 1)}>
+            <Image style={styles.plus} source={{uri:'https://cdn-icons-png.flaticon.com/512/32/32339.png'}}/>
+          </TouchableOpacity>
+        </>
+      )
+    }
 
     return (
+      //<Stack.Screen name="ProfileEdit" component={ProfileEdit}>
         <SafeAreaView>
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
             {/* Stories */}
                 <View>
-                    <View style={styles.topBar}>
-                        <TouchableOpacity>
-                            <Image style={styles.backArrow}  source={{uri:'https://cdn.iconscout.com/icon/free/png-256/back-arrow-1767523-1502427.png'}}/>
-                        </TouchableOpacity>
-                        <View style={styles.settings} >
-                            <Text style={styles.settingsText}>Profile</Text>
-                        </View>
-                    </View>
                     <View style={styles.topProfileImage}>
                         <View style={styles.profileBlock}>
                             <View style={styles.profile}>
@@ -65,8 +98,7 @@ const Counter = () => {
                     </View>
                     <View style={styles.inputs}>
                         <Text style={styles.infoType}>Gender:</Text>
-                        <CheckBox title='Male' checked={isMaleChecked} onPress={() => setMaleCheck(!isMaleChecked)} />
-                        <CheckBox title='Female' checked={!isMaleChecked} onPress={() => setMaleCheck(!isMaleChecked)} />
+                        <Text style={styles.input}>{gender}</Text>
                     </View>
                     <View style={styles.inputs}>
                         <Text style={styles.infoType}>Interests:</Text>
@@ -74,41 +106,23 @@ const Counter = () => {
                             style={styles.input}
                             onChangeInterests={onChangeInterests}
                             value={interests}
-                            placeholder="Please write your interests."
-                            defaultValue="Biking, Dancing, Music,"
+                            placeholder="Please write your top 3 interests."
+                            defaultValue="Biking, Dancing, Music"
                         />
                     </View>
                     <View style={styles.inputs}>
                         <Text style={styles.infoType}>Age:</Text>
-                        <TouchableOpacity onPress={() => setAge(age - 1)}>
-                            <Image style={styles.minus}  source={{uri:'https://cdn-icons-png.flaticon.com/512/43/43625.png'}}/>
-                        </TouchableOpacity>
-                        <Text style={styles.ageText}>{age}</Text>
-                        <TouchableOpacity onPress={() => setAge(age + 1)}>
-                            <Image style={styles.plus}  source={{uri:'https://cdn-icons-png.flaticon.com/512/32/32339.png'}}/>
-                        </TouchableOpacity>
+                        <EditNumComponent num={age} setNum={setAge} />
                     </View>
                     <View style={styles.line} />
                     <Text style={styles.nameTitle}>Filters</Text>
                     <View style={styles.inputs}>
                         <Text style={styles.infoType}>Min Age:</Text>
-                        <TouchableOpacity onPress={() => setAgeMin(ageMin - 1)}>
-                            <Image style={styles.minus}  source={{uri:'https://cdn-icons-png.flaticon.com/512/43/43625.png'}}/>
-                        </TouchableOpacity>
-                        <Text style={styles.ageText}>{ageMin}</Text>
-                        <TouchableOpacity onPress={() => setAgeMin(ageMin + 1)}>
-                            <Image style={styles.plus}  source={{uri:'https://cdn-icons-png.flaticon.com/512/32/32339.png'}}/>
-                        </TouchableOpacity>
+                        <EditNumComponent num={ageMin} setNum={setAgeMin} />
                     </View>
                     <View style={styles.inputs}>
                         <Text style={styles.infoType}>Max Age:</Text>
-                        <TouchableOpacity onPress={() => setAgeMax(ageMax - 1)}>
-                            <Image style={styles.minus}  source={{uri:'https://cdn-icons-png.flaticon.com/512/43/43625.png'}}/>
-                        </TouchableOpacity>
-                        <Text style={styles.ageText}>{ageMax}</Text>
-                        <TouchableOpacity onPress={() => setAgeMax(ageMax + 1)}>
-                            <Image style={styles.plus}  source={{uri:'https://cdn-icons-png.flaticon.com/512/32/32339.png'}}/>
-                        </TouchableOpacity>
+                        <EditNumComponent num={ageMax} setNum={setAgeMax} />
                     </View>
                     <View style={styles.inputs}>
                         <Text style={styles.infoType}>Gender:</Text>
@@ -118,6 +132,7 @@ const Counter = () => {
                 </View>
             </ScrollView>
         </SafeAreaView>
+       //</Stack.Screen>
     );
 }
 
@@ -127,9 +142,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     borderBottomColor: '#919492',
     borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  container: {
-    overflow: 'hidden',
   },
   topBar: {
     display: 'flex',
@@ -263,6 +275,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     padding: 10, 
     marginRight: 20, 
+    color: '#000000'
   },
   inputBox: {
     fontFamily: 'System',
@@ -284,6 +297,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#000000',
     paddingLeft: 25,
+    width: 100,
   },
   ageText: {
     fontFamily: 'System',
