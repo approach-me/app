@@ -12,14 +12,18 @@ import ProfileEdit from './ProfileEdit';
 
 const Stack = createStackNavigator();
 
-const Counter = ({navigation}) => {
+const Counter = ({navigation, route}) => {
   const [userName, setUserName] = useState("firstName LastName")
   const [userBio, setUserBio] = useState("bio")
   const [userInterests, setUserInterests] = useState(["", "", ""])
+
+  const userId = (typeof route.params !== 'undefined') ? route.params.userId : 'oEf6SPn639ChvP70RStD';
+  const canEdit = (typeof route.params !== 'undefined') ? route.params.canEdit : true;
+
   useEffect(() => {
     const subscriber = firestore()
     .collection('users')
-    .doc('oEf6SPn639ChvP70RStD')
+    .doc(userId)
     .onSnapshot(documentSnapshot => {
       setUserName(documentSnapshot.data().firstName);
       setUserBio(documentSnapshot.data().bio)
@@ -34,14 +38,20 @@ const Counter = ({navigation}) => {
     navigation.push('ProfileEdit')
   }
 
+  const editProfile = () => {
+    return (
+      <TouchableOpacity style={styles.setting} onPress = {goToProfileEdit}>
+          <Image style={styles.settingWheel} source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <SafeAreaView>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         {/* Stories */}
         <View>
-          <TouchableOpacity style={styles.setting} onPress = {goToProfileEdit}>
-          <Image style={styles.settingWheel} source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
-          </TouchableOpacity>
+          {canEdit ? editProfile() : null}
           <View style={styles.topBar}>
             <View style={styles.profileBlock}>
               <View style={styles.profile}>

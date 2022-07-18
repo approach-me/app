@@ -24,6 +24,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const Stack2 = createStackNavigator();
 
 
 function ProfilePages() {
@@ -35,6 +36,14 @@ function ProfilePages() {
   );
 }
 
+function GetHomepage() {
+  return (
+    <Stack2.Navigator>
+      <Stack2.Screen name = "Homepage" component={Homepage} />
+      <Stack.Screen name = "Profile" component={Profile} />
+    </Stack2.Navigator>
+  )
+}
 const MyTheme = {
   colors: {
     background: 'white'
@@ -47,7 +56,12 @@ export default function App() {
       <NavigationContainer theme={MyTheme}>
         <Tab.Navigator initialRouteName="HomePage" >
         <Tab.Screen name="Home" component={Home} />
-          <Tab.Screen name="HomePage" component={Homepage} />
+          <Tab.Screen 
+          options={{
+            headerShown: false,
+            tabBarIcon: () => (<Image source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}} style={{width: 20, height: 20}} />)
+          }}
+          name="Homepage" component={GetHomepage} />
           <Tab.Screen name="Messages" component={Messages} />
           <Tab.Screen 
           options={{
