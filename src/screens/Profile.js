@@ -16,12 +16,14 @@ const Counter = ({navigation}) => {
   const [userName, setUserName] = useState("firstName LastName")
   const [userBio, setUserBio] = useState("bio")
   const [userInterests, setUserInterests] = useState(["", "", ""])
+
+  
   useEffect(() => {
     const subscriber = firestore()
     .collection('users')
     .doc('oEf6SPn639ChvP70RStD')
     .onSnapshot(documentSnapshot => {
-      setUserName(documentSnapshot.data().firstName);
+      setUserName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
       setUserBio(documentSnapshot.data().bio)
       setUserInterests(documentSnapshot.data().interests);
     });

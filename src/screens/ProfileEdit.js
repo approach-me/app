@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, ImageBackground, TextInput, Pressable } from 'react-native';
+import React, {useEffect, useState, useLayoutEffect, useCallback} from 'react'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, ImageBackground, TextInput, Pressable, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
 import { UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions';
@@ -10,38 +10,46 @@ import firestore from '@react-native-firebase/firestore';
 
 
 const Stack = createStackNavigator();
-const Counter = () => {
-    const [name, onChangeName] = useState(null);
-    const [bio, onChangeBio] = useState(null);
-    const [interests, onChangeInterests] = useState(null);
-    const [age, setAge] = useState(0);
-    const [ageMin, setAgeMin] = useState(0);
-    const [ageMax, setAgeMax] = useState(0);
-    const [isMaleFilterChecked, setMaleFilterCheck] = useState(false);
-    const [isFemaleFilterChecked, setFemaleFilterCheck] = useState(false);
-    const [gender, setGender] = useState('Male');
+const Counter = ({navigation}) => {
+  const [isDone, setIsDone] = useState(false);
+  const [name, onChangeName] = useState("");
+  const [bio, onChangeBio] = useState("");
+  const [interests, onChangeInterests] = useState("");
+  const [age, setAge] = useState(0);
+  const [ageMin, setAgeMin] = useState(0);
+  const [ageMax, setAgeMax] = useState(0);
+  const [isMaleFilterChecked, setMaleFilterCheck] = useState(false);
+  const [isFemaleFilterChecked, setFemaleFilterCheck] = useState(false);
+  const [gender, setGender] = useState('Male');
 
-    let changeBio = () => {
-      console.log(bio)
-      onChangeBio(bio)
-      const db = firestore();
-      db.collection('users')
-                            .doc('oEf6SPn639ChvP70RStD').update({'bio': bio});
+  useEffect(() => {
+    if(!isDone){
+      return
     }
+    console.log(bio)
+      firestore().collection('users')
+      .doc('oEf6SPn639ChvP70RStD').update({
+        'bio': bio,
+        'firstName': name.split(" ")[0],
+        'lastName': name.split(" ")[1],
+        'interests': [interests.split(", ")[0], interests.split(", ")[1], interests.split(", ")[2]]
+      });
+  }, [isDone])
+
     useEffect(() => {
       const subscriber = firestore().collection('users')
       .doc('oEf6SPn639ChvP70RStD')
-      .onSnapshot(documentSnapshot => {
+      .get().then(documentSnapshot => {
         onChangeName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
         onChangeBio(documentSnapshot.data().bio)
-        onChangeInterests(documentSnapshot.data().interests);
+        onChangeInterests(documentSnapshot.data().interests.join(", "));
         setAge(documentSnapshot.data().age);
         setGender(documentSnapshot.data().gender)
       });
   
       // Stop listening for updates when no longer required
-      return () => subscriber();
-    }, [ onChangeName, onChangeBio, onChangeInterests, setAge ]);
+      return () => subscriber;
+    }, []);
 
     const EditNumComponent = ({num, setNum}) => {
       return (
@@ -57,8 +65,15 @@ const Counter = () => {
       )
     }
 
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <Button onPress={() => setIsDone(true)} title="DONE" />
+        ),
+      });
+    }, [navigation]);
+
     return (
-      //<Stack.Screen name="ProfileEdit" component={ProfileEdit}>
         <SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false}>
             {/* Stories */}
@@ -80,20 +95,18 @@ const Counter = () => {
                         <Text style={styles.infoType}>Name:</Text>
                         <TextInput
                             style={styles.input}
-                            onChangeName={name => onChangeName(name)}
+                            onChangeText={onChangeName}
                             value={name}
                             placeholder="Please enter your display name."
-                            defaultValue="Lucas Mark"
                         />
                     </View>
                     <View style={styles.inputs}>
                         <Text style={styles.infoType}>Bio:</Text>
                         <TextInput
                             style={styles.inputBox}
-                            onChangeBio={onChangeBio}
+                            onChangeText={onChangeBio}
                             value={bio}
                             placeholder="Please write your bio."
-                            defaultValue="Describe who you are in 3 word"
                         />
                     </View>
                     <View style={styles.inputs}>
@@ -104,10 +117,9 @@ const Counter = () => {
                         <Text style={styles.infoType}>Interests:</Text>
                         <TextInput
                             style={styles.input}
-                            onChangeInterests={onChangeInterests}
+                            onChangeText={onChangeInterests}
                             value={interests}
-                            placeholder="Please write your top 3 interests."
-                            defaultValue="Biking, Dancing, Music"
+                            placeholder="Please write your top 3 interests comma seperated."
                         />
                     </View>
                     <View style={styles.inputs}>
