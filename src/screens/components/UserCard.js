@@ -1,12 +1,21 @@
 import React from 'react'
-import { StyleSheet, Text, View, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, TouchableOpacity} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const UserCard = (props) => {
+    const navigation = useNavigation();
     return (
         <View style={styles.story}>
-            <ImageBackground style={styles.storyImage} source={{uri:props.path}}>
-                <Text style={styles.storyName}>{props.name}, {props.age}</Text>
-            </ImageBackground>
+            <TouchableOpacity style={styles.storyImage} onPress = {() => {
+\                navigation.navigate('Profile', {
+                    userId: props.userId,
+                    canEdit: false
+                })
+            } }>
+                <ImageBackground style={styles.storyImage} source={{uri:props.path}}>
+                    <Text style={styles.storyName}>{props.name}, {props.age}</Text>
+                </ImageBackground>
+            </TouchableOpacity>
         </View> 
     )
 }

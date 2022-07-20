@@ -17,7 +17,7 @@ import com.facebook.react.bridge.UIManager;
 import com.facebook.react.fabric.ComponentFactory;
 import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
-import com.facebook.react.fabric.ReactNativeConfig;
+import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
 import com.approachme.BuildConfig;
 import com.approachme.newarchitecture.components.MainComponentsRegistry;
@@ -49,7 +49,7 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
     //     packages.add(new MyReactNativePackage());
     // TurboModules must also be loaded here providing a valid TurboReactPackage implementation:
     //     packages.add(new TurboReactPackage() { ... });
-    // If you have custom Fabric Components, their ViewManagers should also be loaded here
+    // If you have custom Fabric components, their ViewManagers should also be loaded here
     // inside a ReactPackage.
     return packages;
   }
@@ -78,7 +78,7 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
         final List<JSIModuleSpec> specs = new ArrayList<>();
 
         // Here we provide a new JSIModuleSpec that will be responsible of providing the
-        // custom Fabric Components.
+        // custom Fabric components.
         specs.add(
             new JSIModuleSpec() {
               @Override
@@ -91,7 +91,7 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
                 final ComponentFactory componentFactory = new ComponentFactory();
                 CoreComponentsRegistry.register(componentFactory);
 
-                // Here we register a Components Registry.
+                // Here we register a components Registry.
                 // The one that is generated with the template contains no components
                 // and just provides you the one from React Native core.
                 MainComponentsRegistry.register(componentFactory);
@@ -105,7 +105,7 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
                 return new FabricJSIModuleProvider(
                     reactApplicationContext,
                     componentFactory,
-                    ReactNativeConfig.DEFAULT_CONFIG,
+                    new EmptyReactNativeConfig(),
                     viewManagerRegistry);
               }
             });

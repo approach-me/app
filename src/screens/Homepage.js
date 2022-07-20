@@ -1,83 +1,73 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, FlatList, Image, ScrollView, ImageBackground } from 'react-native';
 import Story from './components/Story';
 import { connect } from 'react-redux';
-import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
-import {PulseAnimation} from 'react-native-animated-pulse';
+import { PulseAnimation } from 'react-native-animated-pulse';
 import UserCard from './components/UserCard';
 import { UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions';
 
 const Counter = (props) => {
-  const isSearching = false;
-
+  const getAgeFromEpoc = (epochTime) => { // https://stackoverflow.com/questions/14229260/unix-timestamp-to-age-in-javascript
+    return ((new Date()).getTime() - epochTime) / (1000 * 60 * 60 * 24 * 365);
+  }
   const Searching = () => {
-   return (
-    <SafeAreaView>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        {/* Stories */}
-        <View>
-          <View style={styles.topBar}>
-            <Text style={styles.headingTitle}>Stories</Text>
-            {/* {Show} */}
-            <TouchableOpacity style={styles.setting}>
-              <Image style={styles.settingWheel}  source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
-            </TouchableOpacity>
-          </View>
-          <FlatList 
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={[
-              {name: 'Mark', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-              {name: 'Ali', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-              {name: 'Stephen', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-              {name: 'Aiony', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-              {name: 'Mark', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-              {name: 'Ali', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-              {name: 'Stephen', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-              {name: 'Aiony', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-            ]}
-            // renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-            renderItem={({item}) => 
-              <TouchableOpacity onPress={props.requestPremissions}>
-                <Story name={item.name} path={item.path}></Story>              
+    return (
+      <SafeAreaView>
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+          {/* Stories */}
+          <View>
+            <View style={styles.topBar}>
+              <Text style={styles.headingTitle}>Stories</Text>
+              {/* {Show} */}
+              <TouchableOpacity style={styles.setting}>
+                <Image style={styles.settingWheel} source={{ uri: 'https://pic.onlinewebfonts.com/svg/img_489905.png' }} />
               </TouchableOpacity>
-            }
-          />
-        </View>
-        
-        {/* Radar */}
-        <TouchableOpacity onPress={ () => props.updateUserSearchingState(false)}>
-          <View style={styles.radar}>
-            <PulseAnimation color={'#73faf8'} numPulses={2} diameter={200} speed={1000} duration={2000} initialDiameter={100}/> 
-            <ImageBackground style={styles.profileImage} source={{uri:'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}/>
-          </View>
-        </TouchableOpacity>
-        
-        {/* Users Nearby */}
-        <View>
-          <Text style={styles.headingTitle}>Users Nearby</Text>
-          <View style={styles.nearByUser}>
-            <FlatList 
+            </View>
+            <FlatList
               showsHorizontalScrollIndicator={false}
+              horizontal
               data={[
-                {name: 'Mark', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-                {name: 'Ali', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Stephen', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Aiony', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Mark', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-                {name: 'Ali', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Stephen', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Aiony', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
+                { name: 'Mark', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
+                { name: 'Ali', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Stephen', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Aiony', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Mark', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
+                { name: 'Ali', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Stephen', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Aiony', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
               ]}
               // renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-              renderItem={({item}) => <UserCard name={item.name} age={item.age} path={item.path}></UserCard>}
-              numColumns={2}
+              renderItem={({ item }) =>
+                <TouchableOpacity onPress={props.requestPremissions}>
+                  <Story name={item.name} path={item.path} ></Story>
+                </TouchableOpacity>
+              }
             />
-          </View> 
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-   )
+          </View>
+
+          {/* Radar */}
+          <TouchableOpacity onPress={() => props.updateUserSearchingState(false)}>
+            <View style={styles.radar}>
+              <PulseAnimation color={'#73faf8'} numPulses={2} diameter={200} speed={1000} duration={2000} initialDiameter={100} />
+              <ImageBackground style={styles.profileImage} source={{ uri: 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80' }} />
+            </View>
+          </TouchableOpacity>
+
+          {/* Users Nearby */}
+          <View>
+            <Text style={styles.headingTitle}>Users Nearby: {props.userId}</Text>
+            <View style={styles.nearByUser}>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                data={props.nearbyUserList}
+                renderItem={({ item }) => <UserCard userId={item.userId} name={item.name} age={20} path={item.thumbnailUri}></UserCard>} 
+                numColumns={2}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    )
   };
 
   const NotSearching = () => {
@@ -86,14 +76,14 @@ const Counter = (props) => {
         {/* Radar */}
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.setting}>
-            <Image style={styles.settingWheel}  source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
+            <Image style={styles.settingWheel} source={{ uri: 'https://pic.onlinewebfonts.com/svg/img_489905.png' }} />
           </TouchableOpacity>
         </View>
         <View style={styles.radarStarter}>
-          <TouchableOpacity style={styles.startSearchText} onPress={ () => props.updateUserSearchingState(true)}>
-            <ImageBackground style={styles.profileImage} source={{uri:'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}/>
+          <TouchableOpacity style={styles.startSearchText} onPress={() => props.updateUserSearchingState(true)}>
+            <ImageBackground style={styles.profileImage} source={{ uri: 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80' }} />
           </TouchableOpacity>
-          
+
           <View style={styles.startSearchText}>
             <Text>When you are ready to meet nearby users,</Text>
             <Text>press on your profile!</Text>
@@ -101,11 +91,11 @@ const Counter = (props) => {
         </View>
       </SafeAreaView>
     )
-   };
+  };
 
   return (
     <View>
-      { props.isUserSearching ? Searching() : NotSearching()} 
+      {props.isUserSearching ? Searching() : NotSearching()}
     </View>
   );
 }
@@ -157,14 +147,14 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',      
+    alignItems: 'center',
   },
   radar: {
     height: 150,
     margin: 20,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',      
+    alignItems: 'center',
   },
   profileImage: {
     width: 100,
@@ -193,10 +183,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    hasPermissions: state.permission.hasAllRequiredPermissions,
-    bluetoothState: state.bluetooth.bluetoothState,
-    scannedDevices: state.bluetooth.scannedDevices,
     isUserSearching: state.bluetooth.isUserSearching,
+    nearbyUserList: state.lasn.nearbyUserList,
+    userId: state.lasn.userId
   };
 };
 const mapDispatchToProps = (dispatch) => {
