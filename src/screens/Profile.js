@@ -25,7 +25,7 @@ const Counter = ({navigation, route}) => {
     .collection('users')
     .doc(userId)
     .onSnapshot(documentSnapshot => {
-      setUserName(documentSnapshot.data().firstName);
+      setUserName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
       setUserBio(documentSnapshot.data().bio)
       setUserInterests(documentSnapshot.data().interests);
     });
