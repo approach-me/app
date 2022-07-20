@@ -6,10 +6,12 @@ const UserCard = (props) => {
     const navigation = useNavigation();
     return (
         <View style={styles.story}>
-            <TouchableOpacity style={styles.storyImage} onPress = {() => navigation.navigate('Profile', {
-                userId: props.userId,
-                canEdit: false
-            })}>
+            <TouchableOpacity style={styles.storyImage} onPress = {() => {
+\                navigation.navigate('Profile', {
+                    userId: props.userId,
+                    canEdit: false
+                })
+            } }>
                 <ImageBackground style={styles.storyImage} source={{uri:props.path}}>
                     <Text style={styles.storyName}>{props.name}, {props.age}</Text>
                 </ImageBackground>
