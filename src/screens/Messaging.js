@@ -1,197 +1,194 @@
-import React, {useState} from 'react'
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, FlatList, Image, ScrollView, ImageBackground, TextInput, KeyboardAvoidingView } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react'
+import { StyleSheet, View,  Icon  } from 'react-native';
 import { connect } from 'react-redux';
-import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
-import Message from './components/Message';
+// import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
 import { UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import auth from '@react-native-firebase/auth';
+import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import database from '@react-native-firebase/database';
 
-const Counter = () => {
-  const [message, onChangemessage] = useState(null);
-  const orderedMessages = [
-    { key: 1, writer: true, name: 'Jawad Ali', lastMessage: 'Testing last message, what up, Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 2, writer: true, name: 'Sultan Em', lastMessage: 'Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 3, writer: false, name: 'Lucas Mark', lastMessage: 'Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 4, writer: false, name: 'Jawad Ali', lastMessage: 'Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 5, writer: true, name: 'Lucas Mark', lastMessage: 'Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 6, writer: false, name: 'Jawad Ali', lastMessage: 'Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 7, writer: false, name: 'Lucas Mark', lastMessage: 'Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 8, writer: false, name: 'Sultan Em', lastMessage: 'Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 9, writer: true, name: 'Jawad Ali', lastMessage: 'Testing last message, what up, Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 10, writer: true, name: 'Sultan Em', lastMessage: 'Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 11, writer: false, name: 'Lucas Mark', lastMessage: 'Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 12, writer: false, name: 'Jawad Ali', lastMessage: 'Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 13, writer: true, name: 'Lucas Mark', lastMessage: 'Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 14, writer: false, name: 'Jawad Ali', lastMessage: 'Testing last message, what up, what up, Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-    { key: 15, writer: false, name: 'Lucas Mark', lastMessage: 'Testing last message, what up', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
-  ];
-  const messagesList = orderedMessages.map((item) => <Message key={item.key} writer={item.writer} name={item.name} lastMessage={item.lastMessage} path={item.path}></Message>);
+const Counter = (props) => {
+  console.log(props.route);
+  let {userName, userID} = props.route.params;
+  console.log(userName);
+  console.log(userID);
+  const [messages, setMessages] = useState([]);
+  const [messageGroupId, setMessageGroupId] = useState('null');
 
-  const authh = () => {
-      auth()
-    .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
-    .then(() => {
-      console.log('User account created & signed in!');
-    })
-    .catch(error => {
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
+  const user1Name = "Samr";
+  const user1Id = 1;
+  const user2Name = userName;
+  const user2Id = userID;
+  const user2Path = 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60';
+
+  //creates a new messaging group if there isnt one created before
+  const onLogin = async () => {
+    try {
+      // check if users have a pre existing group chat
+      const group = Math.min(user1Id, user2Id) + "-" + Math.max(user1Id, user2Id);
+      const messageGroup = await findMessageGroupId(group);
+      // console.log(messageGroup.val());
+
+      if (messageGroup.val()) {
+        setMessageGroupId(group);
+      } else {
+        database().ref('messageGroups/').child(`${group}`).set({
+          userName1: user1Name,
+          userID1: user1Id,
+          userName2: user2Name,
+          userID2: user2Id,
+          // messages: { 0: {createdAt: 0, sender: 1, text: "test"}},
+        })
+        .then(() => console.log('Data set.'));
+        setMessageGroupId(group);
       }
-
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-
+    } catch (error) {
       console.error(error);
+    }
+  }
+
+  const findMessageGroupId = async group => {
+    const groupId = database().ref(`messageGroups/${group}`).once('value');
+
+    return groupId;
+  };
+
+  onLogin();
+
+  useEffect( () => {
+    const loadData = async () => {
+      const myChatroom = await fetchMessages();
+
+      // console.log(myChatroom.val().messages);
+
+      setMessages(renderMessages(myChatroom.val().messages));
+    };
+
+    loadData();
+    
+    database()
+    .ref(`messageGroups/${messageGroupId}`)
+    .on('value', snapshot => {
+      const data = snapshot.val();
+      console.log(data);
+      if (data){
+        setMessages(renderMessages(data.messages));
+      }
     });
+  }, [fetchMessages, renderMessages, messageGroupId]);
+
+  
+  const fetchMessages = useCallback(async () => {
+    const messages = await database().ref(`messageGroups/${messageGroupId}`).once('value');
+
+    return messages;
+  }, [messageGroupId]);
+
+  const renderMessages = useCallback( (msgs) => {
+    if (!msgs){
+      return [];
+    }
+
+    let renderedMessage = [];
+
+    let counter = 0;
+
+    for (let msg of msgs) {
+      // console.log(msg) ;
+
+      let msgObject = {
+        _id: counter,
+        text: msg.text,
+        createdAt: msg.createdAt,
+        user: {
+          _id: msg.sender == user1Id ? user2Id : user1Id,
+          name: msg.sender == user1Id ? user2Name : user1Name,
+          avatar: user2Path,
+        }
+      }
+      renderedMessage.unshift(msgObject);
+      counter++;
+    }
+
+    return renderedMessage;
+  },[
+    // myData.avatar,
+    // myData.username,
+    // selectedUser.avatar,
+    // selectedUser.username,
+    messageGroupId
+  ],
+  );
+
+  const onSend = useCallback(async (msg = []) => {
+
+    const myChatroom = await fetchMessages();
+
+    const lastMessages = myChatroom.val().messages || [];
+
+    database().ref(`messageGroups/${messageGroupId}`).update({
+      messages: [
+        ...lastMessages,
+        {
+          text: msg[0].text,
+          sender: user1Id,
+          createdAt: Date.now(),
+        },
+      ],
+    }).then(() => console.log('Comment Created.'));
+
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages),
+    );
+  }, [fetchMessages, messageGroupId]);
+
+  const renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#2e64e5',
+          },
+        }}
+        textStyle={{
+          right: {
+            color: '#fff',
+          },
+        }}
+      />
+    );
+  };
+
+  const scrollToBottomComponent = () => {
+    return(
+      <FontAwesome name='angle-double-down' size={22} color='#333' />
+    );
   }
 
   return (
-    <SafeAreaView>
-      <View style={styles.topBar}>
-        <View>
-          <TouchableOpacity onPress={ () => authh()}>
-            <Image style={styles.backArrow} source={{ uri: 'https://cdn.iconscout.com/icon/free/png-256/back-arrow-1767523-1502427.png' }} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.profile}>
-          <ImageBackground style={styles.profileImage} source={{ uri: 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80' }} />
-        </View>
-        <Text style={styles.headingTitle}>Jawad Ali</Text>
-      </View>
-      <View style={styles.line} />
-      <KeyboardAvoidingView behavior='height' keyboardVerticalOffset={60}>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container} ref={ref => { this.scrollView = ref }} onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}>
-        <View>
-          {messagesList}
-        </View>
-      </ScrollView>
-      {/* <View style={styles.line} /> */}
-      <View style={styles.messageInput}>
-        <TextInput
-          multiline
-          style={styles.input}
-          onChangemessagee={message => onChangemessage(message)}
-          value={message}
-          placeholder="Aa"
-        />
-        <Image style={styles.sendIcon} source={{ uri: 'https://cdn-icons-png.flaticon.com/128/736/736212.png' }} />
-      </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <View style={{ backgroundColor: "white", flex: 1, marginTop: -45 }}>
+      <GiftedChat
+        style={styles.container}
+        messages={messages}
+        onSend={(messages) => onSend(messages)}
+        user={{
+          _id: user2Id,
+        }}
+        renderBubble={renderBubble}
+        alwaysShowSend
+        // renderSend={renderSend}
+        scrollToBottom
+        scrollToBottomComponent={scrollToBottomComponent}
+        backgroundColor='white'
+      />
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  line: {
-    paddingBottom: 5,
-    paddingTop: 5,
-    borderBottomColor: '#919492',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
   container: {
-    overflow: 'hidden',
-    height: '87%',
-  },
-  topBar: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: '100%',
-  },
-  backArrow: {
-    width: 30,
-    height: 30,
-  },
-  headingTitle: {
-    fontFamily: 'System',
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#000000',
-    margin: 5,
-  },
-  pageTitle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  infoName: {
-    fontFamily: 'System',
-    fontSize: 16,
-    fontWeight: '300',
-    color: '#000000',
-  },
-  nameTitle: {
-    fontFamily: 'System',
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#000000',
-    paddingLeft: 20,
-    paddingTop: 10,
-  },
-  interestTitle: {
-    fontFamily: 'System',
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#000000',
-    paddingLeft: 20,
-    paddingTop: 5,
-  },
-  bioText: {
-    fontFamily: 'System',
-    fontSize: 14,
-    fontWeight: '300',
-    color: '#000000',
-    paddingLeft: 25,
-    paddingRight: 25,
-  },
-  info: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    overflow: 'hidden',
-    resizeMode: "contain",
-  },
-  profile: {
-    width: 30,
-    height: 30,
-    marginLeft: 10,
-  },
-  gallery: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10,
-  },
-  input: {
-    fontFamily: 'System',
-    fontSize: 14,
-    fontWeight: '300',
-    margin: 10,
-    height: 40,
-    width: '80%',
-    backgroundColor: '#d4d4d4',
-    borderColor: 'black',
-    borderRadius: 20,
-    borderWidth: 2,
-    padding: 10,
-  },
-  messageInput: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  sendIcon: {
-    width: 30,
-    height: 30,
-    margin: 10,
+    height: '100%',
   },
 });
 

@@ -7,57 +7,55 @@
  */
 
 import React from 'react';
-import { Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
 // import Home from './src/screens/Home.js';
-// import HomepageScreen from './src/screens/Homepage.js';
-// import ProfileScreen from './src/screens/Profile.js';
+import HomepageScreen from './src/screens/Homepage.js';
+import ProfileScreen from './src/screens/Profile.js';
 // import ProfileEdit from './src/screens/ProfileEdit.js';
-// import MessagesScreen from './src/screens/Messages';
-// import MessagingScreen from './src/screens/Messaging';
-import Navigation from './src/routes/homeStack'
-// import 'react-native-gesture-handler';
-// import { NavigationContainer } from '@react-navigation/native';
-// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MessagesScreen from './src/screens/Messages';
+import Messaging from './src/screens/Messaging';
+// import Navigation from './src/routes/homeStack'
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
+}
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+function App() {
   return (
     <Provider store={store}>
-      <Navigation />
+      <NavigationContainer>
+        <Stack.Navigator>
+          {/* <Stack.Screen name="HomepageScreen" component={HomepageScreen} /> */}
+          {/* <Stack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
+          <Stack.Screen name="Messages" component={MessagesScreen} />
+          <Stack.Screen 
+            name="Messaging" 
+            component={Messaging} 
+            options={({ route }) => ({ 
+              title: route.params.name,
+              headerBackTitleVisible: false,
+              headerStyle: {
+                backgroundColor: '#fff',
+                shadowColor: '#fff',
+                elevation: 0,
+              },
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }
 
-
-
-// const Tab = createBottomTabNavigator();
-
-// const MyTheme = {
-//   colors: {
-//     background: 'white'
-//   },
-// };
-
-// export default function App() {
-//   return (
-//     <Provider store={store}>
-//       <NavigationContainer theme={MyTheme}>
-//         <Tab.Navigator initialRouteName="HomePage" >
-//         <Tab.Screen name="Home" component={Home} />
-//           <Tab.Screen name="HomePage" component={Homepage} />
-//           <Tab.Screen name="Messaging" component={Messaging} />
-//           <Tab.Screen 
-//           screenOptions={{
-//             headerShown: false
-//           }}
-//           options={{
-//             tabBarIcon: () => (<Image source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}} style={{width: 20, height: 20}} />)
-//           }}
-//           name="Profile" component={Profile} />
-//         </Tab.Navigator>
-//       </NavigationContainer>
-//     </Provider>
-//   );
-// }
+export default App;
