@@ -7,7 +7,7 @@ const UserCard = (props) => {
     return (
         <View style={styles.story}>
             <TouchableOpacity style={styles.storyImage} onPress = {() => {
-\                navigation.navigate('Profile', {
+                navigation.navigate('Profile', {
                     userId: props.userId,
                     canEdit: false
                 })
