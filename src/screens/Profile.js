@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
   setting: {
     position: 'absolute',
     right: 10,
+    zIndex: 1,
   },
   settingWheel: {
     width: 20,
