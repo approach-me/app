@@ -16,6 +16,7 @@ const Counter = ({navigation, route}) => {
   const [userName, setUserName] = useState("firstName LastName")
   const [userBio, setUserBio] = useState("bio")
   const [userInterests, setUserInterests] = useState(["", "", ""])
+  const [profileImage, setProfileImage] = useState("https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80")
 
   const userId = (typeof route.params !== 'undefined') ? route.params.userId : 'oEf6SPn639ChvP70RStD';
   const canEdit = (typeof route.params !== 'undefined') ? route.params.canEdit : true;
@@ -28,6 +29,7 @@ const Counter = ({navigation, route}) => {
       setUserName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
       setUserBio(documentSnapshot.data().bio)
       setUserInterests(documentSnapshot.data().interests);
+      setProfileImage(documentSnapshot.data().profileImage);
     });
 
     // Stop listening for updates when no longer required
@@ -55,7 +57,7 @@ const Counter = ({navigation, route}) => {
           <View style={styles.topBar}>
             <View style={styles.profileBlock}>
               <View style={styles.profile}>
-                <ImageBackground style={styles.profileImage} source={{uri:'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80'}}/>
+                <ImageBackground style={styles.profileImage} source={{uri: profileImage}}/>
               </View>
             </View>
             <View style={styles.info}>

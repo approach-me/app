@@ -50,12 +50,20 @@ export function* linkWatcher(lasnServiceClient) {
         while (true) {
             const { scannedDevice } = yield take(DEVICE_SCANED);
             const userAlreadySensed = yield call(checkIfUserExistsInNearbyUserList, scannedDevice.id, seenDeviceIds)
+            console.log("SCANNED DEVICE: USER ID: ", scannedDevice.id);
+
             if (userAlreadySensed) {
-                console.log('USER ALREADY SENSED WITH DEVICE ID: ', scannedDevice.id);
+                console.log('USER ALREADY SENSED WITH USER ID: ', scannedDevice.id);
             }
+
+            // if (scannedDevice.id == '90:B1:44:89:A9:82' || scannedDevice.id == '90:B1:44:89:A9:83') {
+            console.log('FOUND SAMSUNG DEVICE!!!');
             const rsp = yield call(linkNearbyUser, lasnServiceClient, scannedDevice.id, userId);
             seenDeviceIds.push(scannedDevice.id); // only push if success.
             console.log('LINKING USER DONE ID:', scannedDevice.id, rsp, seenDeviceIds);
+            // }
+
+
         }
     } finally {
         if (yield cancelled()) {

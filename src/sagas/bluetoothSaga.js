@@ -11,6 +11,7 @@ import { DEVICE_SCANED, SUCCESSFULLY_STARTED_BLUETOOTH_SEQ, SUCCESSFULLY_STOPPED
 import { selectDeviceBluetoothState, selectUserSearchingState } from '../selectors/bluetoothSelectors';
 import { START_CONNECTION, START_DISCONNECTION } from '../actions/lasnActions';
 import { linkNearbyUser } from '../services/lasn';
+import { selectUserId } from '../selectors/lasnSelectors';
 
 // not rlly needed, remove later...
 function* bluetoothEventHandler(event) {
@@ -65,9 +66,10 @@ export function* bluetoothScanner(bleManager) {
 
 export function* bluetoothBroadcaster(bleAvertiser) {
   try {
+    const userId = yield select(selectUserId);
     console.log('STARTING BLUETOOTH BroadCaster TASK!!!');
     while (true) {
-      const broadcastResult = yield call(broadcastBluetoothSignal, bleAvertiser);
+      const broadcastResult = yield call(broadcastBluetoothSignal, bleAvertiser, userId);
       console.log('broadcastResult', broadcastResult);
       yield delay(BROADCAST_FREQUENCY);
       const stopBroadcastResult = yield call(stopBroadcastBluetoothSignal, bleAvertiser); // need to stop to be able to broadcast again.

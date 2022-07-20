@@ -4,7 +4,7 @@ const initialState = {
   isConnected: false,
   isLasnConnected: false,
   nearbyUserList: [],
-  userId: '1', // TODO update later so it isn't hardcoded!
+  userId: '5', // TODO update later so it isn't hardcoded!
   deviceId: 'device_id_change_later',
 };
 
@@ -13,19 +13,20 @@ const lasnReducer = (state = initialState, action) => {
     case DISCONNECTED_SUCCESFULLY: {
       return {
         ...state,
-        isConnected: false
+        isConnected: false,
       }
     }
     case LASN_CONNECTED_SUCCESSFULLY: {
       return {
         ...state,
-        isLasnConnected: true
+        isLasnConnected: true,
       }
     }
-    case LASN_DISCONNECTED_SUCCESSFULLY: {
+    case LASN_DISCONNECTED_SUCCESSFULLY: { 
       return {
         ...state,
-        isLasnConnected: false
+        isLasnConnected: false,
+        nearbyUserList: []
       }
     }
     case CONNECTION_CREATED_SUCCESFULLY: {

@@ -27,18 +27,21 @@ const Counter = (props) => {
               showsHorizontalScrollIndicator={false}
               horizontal
               data={[
-                {name: 'Mark', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-                {name: 'Ali', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Stephen', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Aiony', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Mark', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-                {name: 'Ali', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Stephen', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {name: 'Aiony', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
+                { name: 'Mark', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
+                { name: 'Ali', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Stephen', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Aiony', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Mark', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '30', path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
+                { name: 'Ali', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '26', path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Stephen', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '22', path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+                { name: 'Aiony', userId: 'HYk6ZPQwCaDJnKXsoj2c', age: '21', path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
               ]}
               // renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-              renderItem={({item}) => <UserCard name={item.name} userId={item.userId} age={item.age} path={item.path}></UserCard>}
-              numColumns={2}
+              renderItem={({ item }) =>
+                <TouchableOpacity onPress={props.requestPremissions}>
+                  <Story name={item.name} path={item.path} ></Story>
+                </TouchableOpacity>
+              }
             />
           </View>
 
@@ -52,12 +55,12 @@ const Counter = (props) => {
 
           {/* Users Nearby */}
           <View>
-            <Text style={styles.headingTitle}>Users Nearby</Text>
+            <Text style={styles.headingTitle}>Users Nearby: {props.userId}</Text>
             <View style={styles.nearByUser}>
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 data={props.nearbyUserList}
-                renderItem={({ item }) => <UserCard name={item.name} age={getAgeFromEpoc(item.birthdate)} path={item.thumbnailUri}></UserCard>} // pass in user Id?
+                renderItem={({ item }) => <UserCard userId={item.userId} name={item.name} age={20} path={item.thumbnailUri}></UserCard>} 
                 numColumns={2}
               />
             </View>
@@ -181,7 +184,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     isUserSearching: state.bluetooth.isUserSearching,
-    nearbyUserList: state.lasn.nearbyUserList
+    nearbyUserList: state.lasn.nearbyUserList,
+    userId: state.lasn.userId
   };
 };
 const mapDispatchToProps = (dispatch) => {
