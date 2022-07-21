@@ -3,6 +3,9 @@ import BLEAdvertiser from 'react-native-ble-advertiser';
 import { store } from '../../store/store';
 import { DEVICE_SCANED } from '../../actions/bluetoothActions';
 import { Buffer } from "buffer";
+var TextEncodingShim = require('text-encoding-shim');
+var TextEncoder = TextEncodingShim.TextEncoder;
+var TextDecoder = TextEncodingShim.TextDecoder;
 
 const COMPANY_ID = 0x4C;
 const SERVICE_UUID = '7ef79c92-61c2-4041-b0d1-7ce34616e800';
@@ -13,7 +16,7 @@ export const createBleManager = () => new BleManager();
 export const getBluetoothState = (bleManager) => bleManager.state();
 
 export const convertUserIdToArray = (userId) => {
-  const utf8Encode = new TextEncoder();
+  const utf8Encode = new TextEncoder('utf-8');
   return Array.from(utf8Encode.encode(userId))
 }
 
@@ -47,7 +50,7 @@ const convertManuDataToUserId = (manuData) => {
     // idx 1 = is flags(i think (?))
     // everything else is userId
     const userIdByteArray = bytes.slice(2);
-    const utf8Decode = new TextDecoder();
+    const utf8Decode = new TextDecoder('utf-8');
     return utf8Decode.decode(userIdByteArray)
 }
 // can't make a generator because ble library doesn't support it, so have to use store.dispatch!!
