@@ -3,7 +3,7 @@ const { SubscribeRequest, LinkRequest, DisconnectRequest } = require('../../../p
 
 
 export const getLasnServiceClient = () => {
-  return new LasnServicePromiseClient('http://localhost:8080', null, null); // TODO: Make env variable
+  return new LasnServicePromiseClient('http://192.168.4.112:8080', null, null); // TODO: Make env variable
 }
 
 export const getLasnStream = (lasnService, userId) => {

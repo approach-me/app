@@ -10,7 +10,7 @@ import firestore from '@react-native-firebase/firestore';
 
 
 const Stack = createStackNavigator();
-const Counter = ({navigation}) => {
+const Counter = ({navigation , route}) => {
   const [isDone, setIsDone] = useState(false);
   const [name, onChangeName] = useState("");
   const [bio, onChangeBio] = useState("");
@@ -21,14 +21,15 @@ const Counter = ({navigation}) => {
   const [isMaleFilterChecked, setMaleFilterCheck] = useState(false);
   const [isFemaleFilterChecked, setFemaleFilterCheck] = useState(false);
   const [gender, setGender] = useState('Male');
+  const { userId  } = route.params;
+  console.log('THE USER ID IS ', userId)
 
   useEffect(() => {
     if(!isDone){
       return
     }
-    console.log(bio)
       firestore().collection('users')
-      .doc('oEf6SPn639ChvP70RStD').update({
+      .doc(userId).update({
         'bio': bio,
         'firstName': name.split(" ")[0],
         'lastName': name.split(" ")[1],
@@ -38,7 +39,7 @@ const Counter = ({navigation}) => {
 
     useEffect(() => {
       const subscriber = firestore().collection('users')
-      .doc('oEf6SPn639ChvP70RStD')
+      .doc(userId)
       .get().then(documentSnapshot => {
         onChangeName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
         onChangeBio(documentSnapshot.data().bio)

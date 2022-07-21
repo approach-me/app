@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet, View,  Icon  } from 'react-native';
+import { StyleSheet, View, Icon } from 'react-native';
 import { connect } from 'react-redux';
 // import { REQUEST_ALL_PERMISSIONS } from '../actions/permissionActions'
 import { UPDATE_USER_SEARCHING_STATE } from '../actions/bluetoothActions';
@@ -9,17 +9,16 @@ import database from '@react-native-firebase/database';
 
 const Counter = (props) => {
   console.log(props.route);
-  let {userName, userID} = props.route.params;
-  console.log(userName);
-  console.log(userID);
+  let { name: userName, userID: recieverUserId, recieverProfileImage } = props.route.params;
+  console.log('MESSAGING PAGE DATA: ', userName, recieverUserId, recieverProfileImage);
   const [messages, setMessages] = useState([]);
   const [messageGroupId, setMessageGroupId] = useState('null');
 
   const user1Name = "Samr";
-  const user1Id = 1;
+  const user1Id = props.userId;
   const user2Name = userName;
-  const user2Id = userID;
-  const user2Path = 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60';
+  const user2Id = recieverUserId;
+  const user2Path = recieverProfileImage;
 
   //creates a new messaging group if there isnt one created before
   const onLogin = async () => {
@@ -39,7 +38,7 @@ const Counter = (props) => {
           userID2: user2Id,
           // messages: { 0: {createdAt: 0, sender: 1, text: "test"}},
         })
-        .then(() => console.log('Data set.'));
+          .then(() => console.log('Data set.'));
         setMessageGroupId(group);
       }
     } catch (error) {
@@ -55,7 +54,7 @@ const Counter = (props) => {
 
   onLogin();
 
-  useEffect( () => {
+  useEffect(() => {
     const loadData = async () => {
       const myChatroom = await fetchMessages();
 
@@ -65,27 +64,27 @@ const Counter = (props) => {
     };
 
     loadData();
-    
+
     database()
-    .ref(`messageGroups/${messageGroupId}`)
-    .on('value', snapshot => {
-      const data = snapshot.val();
-      console.log(data);
-      if (data){
-        setMessages(renderMessages(data.messages));
-      }
-    });
+      .ref(`messageGroups/${messageGroupId}`)
+      .on('value', snapshot => {
+        const data = snapshot.val();
+        console.log(data);
+        if (data) {
+          setMessages(renderMessages(data.messages));
+        }
+      });
   }, [fetchMessages, renderMessages, messageGroupId]);
 
-  
+
   const fetchMessages = useCallback(async () => {
     const messages = await database().ref(`messageGroups/${messageGroupId}`).once('value');
 
     return messages;
   }, [messageGroupId]);
 
-  const renderMessages = useCallback( (msgs) => {
-    if (!msgs){
+  const renderMessages = useCallback((msgs) => {
+    if (!msgs) {
       return [];
     }
 
@@ -111,7 +110,7 @@ const Counter = (props) => {
     }
 
     return renderedMessage;
-  },[
+  }, [
     // myData.avatar,
     // myData.username,
     // selectedUser.avatar,
@@ -161,7 +160,7 @@ const Counter = (props) => {
   };
 
   const scrollToBottomComponent = () => {
-    return(
+    return (
       <FontAwesome name='angle-double-down' size={22} color='#333' />
     );
   }
@@ -198,6 +197,7 @@ const mapStateToProps = (state) => {
     bluetoothState: state.bluetooth.bluetoothState,
     scannedDevices: state.bluetooth.scannedDevices,
     isUserSearching: state.bluetooth.isUserSearching,
+    userId: state.lasn.userId,
   };
 };
 const mapDispatchToProps = (dispatch) => {

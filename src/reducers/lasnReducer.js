@@ -4,7 +4,7 @@ const initialState = {
   isConnected: false,
   isLasnConnected: false,
   nearbyUserList: [],
-  userId: '5', // TODO update later so it isn't hardcoded!
+  userId: '4', // TODO update later so it isn't hardcoded!
   deviceId: 'device_id_change_later',
 };
 

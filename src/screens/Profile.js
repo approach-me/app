@@ -11,39 +11,48 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ProfileEdit from './ProfileEdit';
 
 const Stack = createStackNavigator();
-
-const Counter = ({navigation, route}) => {
+const Counter = ({ navigation, route, userId }) => {
   const [userName, setUserName] = useState("firstName LastName")
   const [userBio, setUserBio] = useState("bio")
   const [userInterests, setUserInterests] = useState(["", "", ""])
   const [profileImage, setProfileImage] = useState("https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80")
 
-  const userId = (typeof route.params !== 'undefined') ? route.params.userId : 'oEf6SPn639ChvP70RStD';
+  userId = (typeof route.params !== 'undefined') ? route.params.userId : userId;
   const canEdit = (typeof route.params !== 'undefined') ? route.params.canEdit : true;
 
   useEffect(() => {
     const subscriber = firestore()
-    .collection('users')
-    .doc(userId)
-    .onSnapshot(documentSnapshot => {
-      setUserName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
-      setUserBio(documentSnapshot.data().bio)
-      setUserInterests(documentSnapshot.data().interests);
-      setProfileImage(documentSnapshot.data().profileImage);
-    });
+      .collection('users')
+      .doc(userId)
+      .onSnapshot(documentSnapshot => {
+        setUserName(documentSnapshot.data().firstName + " " + documentSnapshot.data().lastName);
+        setUserBio(documentSnapshot.data().bio)
+        setUserInterests(documentSnapshot.data().interests);
+        setProfileImage(documentSnapshot.data().profileImage);
+      });
 
     // Stop listening for updates when no longer required
     return () => subscriber();
   }, [setUserName, setUserBio, setUserInterests]);
 
   const goToProfileEdit = () => {
-    navigation.push('ProfileEdit')
+    navigation.push('ProfileEdit', { userId: userId })
   }
-
+  const goToMessagingScreen = () => {
+    navigation.navigate('Messaging', { userID: userId, name: userName, recieverProfileImage: profileImage })
+  }
   const editProfile = () => {
     return (
-      <TouchableOpacity style={styles.setting} onPress = {goToProfileEdit}>
-          <Image style={styles.settingWheel} source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}}/>
+      <TouchableOpacity style={styles.setting} onPress={goToProfileEdit}>
+        <Image style={styles.settingWheel} source={{ uri: 'https://pic.onlinewebfonts.com/svg/img_489905.png' }} />
+      </TouchableOpacity>
+    )
+  }
+
+  const renderMessageButton = () => {
+    return (
+      <TouchableOpacity style={styles.setting} onPress={goToMessagingScreen}>
+        <Image style={styles.settingWheel} source={{ uri: 'https://flyclipart.com/thumb2/sms-chat-message-information-memo-whatsapp-png-icon-free-321531.png' }} />
       </TouchableOpacity>
     )
   }
@@ -53,11 +62,11 @@ const Counter = ({navigation, route}) => {
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         {/* Stories */}
         <View>
-          {canEdit ? editProfile() : null}
+          {canEdit ? editProfile() : renderMessageButton()}
           <View style={styles.topBar}>
             <View style={styles.profileBlock}>
               <View style={styles.profile}>
-                <ImageBackground style={styles.profileImage} source={{uri: profileImage}}/>
+                <ImageBackground style={styles.profileImage} source={{ uri: profileImage }} />
               </View>
             </View>
             <View style={styles.info}>
@@ -83,43 +92,43 @@ const Counter = ({navigation, route}) => {
           <View style={styles.interests}>
             <FlatList
               data={[
-                {key: userInterests[0]},
-                {key: userInterests[1]},
-                {key: userInterests[2]},
+                { key: userInterests[0] },
+                { key: userInterests[1] },
+                { key: userInterests[2] },
               ]}
               numColumns={3}
-              renderItem={({item}) => <Text style={styles.bioText}>{'\u00B7' + ' '}{item.key}</Text>}
+              renderItem={({ item }) => <Text style={styles.bioText}>{'\u00B7' + ' '}{item.key}</Text>}
             />
-          </View>  
+          </View>
         </View>
 
         <View style={styles.line} />
-        
+
         <View style={styles.gallery}>
-            <FlatList 
-              showsHorizontalScrollIndicator={false}
-              data={[
-                {path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-                {path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-                {path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'},
-                {path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'},
-                {path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-                {path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60'},
-              ]}
-              // renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-              renderItem={({item}) => <ProfileImage path={item.path}></ProfileImage>}
-              numColumns={2}
-            />
-          </View> 
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            data={[
+              { path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
+              { path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60' },
+              { path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+              { path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+              { path: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' },
+              { path: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60' },
+              { path: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+              { path: 'https://images.unsplash.com/photo-1455274111113-575d080ce8cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60' },
+            ]}
+            // renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+            renderItem={({ item }) => <ProfileImage path={item.path}></ProfileImage>}
+            numColumns={2}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
-   );
+  );
 }
 
 const styles = StyleSheet.create({
-  line:{
+  line: {
     paddingBottom: 5,
     paddingTop: 5,
     borderBottomColor: '#919492',
@@ -192,7 +201,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     resizeMode: "contain",
   },
-  profile:{
+  profile: {
     width: 100,
     height: 100,
     marginLeft: 10,
@@ -202,11 +211,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
-    flexDirection: 'row',  
+    flexDirection: 'row',
   },
   infoItems: {
     justifyContent: 'center',
-    alignItems: 'center',  
+    alignItems: 'center',
     paddingLeft: 10,
     paddingTop: 10,
     paddingRight: 20,
@@ -215,9 +224,9 @@ const styles = StyleSheet.create({
   interests: {
     paddingRight: 30,
   },
-  profileBlock:{
+  profileBlock: {
     justifyContent: 'center',
-    alignItems: 'center',  
+    alignItems: 'center',
   },
   gallery: {
     justifyContent: 'center',
@@ -232,6 +241,7 @@ const mapStateToProps = (state) => {
     bluetoothState: state.bluetooth.bluetoothState,
     scannedDevices: state.bluetooth.scannedDevices,
     isUserSearching: state.bluetooth.isUserSearching,
+    userId: state.lasn.userId,
   };
 };
 const mapDispatchToProps = (dispatch) => {
