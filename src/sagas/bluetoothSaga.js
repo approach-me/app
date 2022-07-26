@@ -78,6 +78,9 @@ export function* bluetoothBroadcaster(bleAvertiser) {
   } finally {
     if (yield cancelled()) {
       console.log('CANCELLED: bluetoothBroadcaster');
+      const stopBroadcastResult = yield call(stopBroadcastBluetoothSignal, bleAvertiser);
+      console.log('BROADCAST STOPPED!!!', stopBroadcastResult);
+
     }
   }
 }

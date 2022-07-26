@@ -54,20 +54,27 @@
      <Provider store={store}>
        <NavigationContainer theme={MyTheme}>
          <Tab.Navigator initialRouteName="HomePage" >
-         <Tab.Screen name="Home" component={Home} />
+          <Tab.Screen 
+          name="Setup" 
+          component={Home}
+          options={{
+            headerShown: false,
+            tabBarIcon: () => (<Image source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}} style={{width: 20, height: 20}} />)
+          }}
+           />
+          <Tab.Screen name="Messaging" component={Messaging} />
            <Tab.Screen 
            options={{
              headerShown: false,
-             tabBarIcon: () => (<Image source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}} style={{width: 20, height: 20}} />)
+             tabBarIcon: () => (<Image source={{uri:'https://cdn-icons-png.flaticon.com/512/25/25694.png'}} style={{width: 20, height: 20}} />)
            }}
-           name="Homepage" component={GetHomepage} />
-           <Tab.Screen name="Messaging" component={Messaging} />
+           name="Home" component={GetHomepage} />
            <Tab.Screen 
            options={{
              headerShown: false,
-             tabBarIcon: () => (<Image source={{uri:'https://pic.onlinewebfonts.com/svg/img_489905.png'}} style={{width: 20, height: 20}} />)
+             tabBarIcon: () => (<Image source={{uri:'http://cdn.onlinewebfonts.com/svg/img_569204.png'}} style={{width: 20, height: 20}} />)
            }}
-           name="ProfilePages" component={ProfilePages} />
+           name="Profile" component={ProfilePages} />
            {/* <Stack.Screen */}
          </Tab.Navigator>
        </NavigationContainer>

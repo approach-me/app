@@ -52,16 +52,20 @@ const Counter = (props) => {
               <ImageBackground style={styles.profileImage} source={{ uri: 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80' }} />
             </View>
           </TouchableOpacity>
+          <Text style={styles.headingTitle}>User ID: {props.userId}</Text>
+
 
           {/* Users Nearby */}
           <View>
-            <Text style={styles.headingTitle}>Users Nearby: {props.userId}</Text>
+            {/* <Text style={styles.headingTitle}>User ID: {props.userId}</Text> */}
+            <Text style={styles.headingTitle}>Users Nearby: {props.nearbyUserList.length}</Text>
             <View style={styles.nearByUser}>
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 data={props.nearbyUserList}
                 renderItem={({ item }) => <UserCard userId={item.userId} name={item.name} age={20} path={item.thumbnailUri}></UserCard>} 
                 numColumns={2}
+                // horizontal
               />
             </View>
           </View>
